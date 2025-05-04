@@ -1,0 +1,101 @@
+SQL*Plus: Release 11.2.0.1.0 Production on Sun May 4 17:21:00 2025
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: oracle
+Enter password:
+Connected to an idle instance.
+
+SQL> startup nomount;
+ORACLE instance started.
+
+Total System Global Area  966709248 bytes
+Fixed Size                  1378680 bytes
+Variable Size             260048520 bytes
+Database Buffers          700448768 bytes
+Redo Buffers                4833280 bytes
+SQL> select instance_name,status from v$instance;
+
+INSTANCE_NAME    STATUS
+---------------- ------------
+vdscd003         STARTED
+
+SQL> alter database mount;
+alter database mount
+*
+ERROR at line 1:
+ORA-00205: error in identifying control file, check alert log for more info
+
+
+SQL> select instance_name,status from v$instance;
+
+INSTANCE_NAME    STATUS
+---------------- ------------
+vdscd003         STARTED
+
+SQL> select status from v$instance;
+
+STATUS
+------------
+STARTED
+
+SQL> show parameter spfile;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+spfile                               string      E:\APP\ASHOK\PRODUCT\11.2.0\DB
+                                                 HOME_1\DATABASE\SPFILEVDSCD003
+                                                 .ORA
+SQL> show parameter pfile;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+spfile                               string      E:\APP\ASHOK\PRODUCT\11.2.0\DB
+                                                 HOME_1\DATABASE\SPFILEVDSCD003
+                                                 .ORA
+SQL> create pfile from spfile;
+
+File created.
+
+SQL> select instance_name,status from v$instance;
+
+INSTANCE_NAME    STATUS
+---------------- ------------
+vdscd003         STARTED
+
+SQL> desc v$parameter;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ NUM                                                NUMBER
+ NAME                                               VARCHAR2(80)
+ TYPE                                               NUMBER
+ VALUE                                              VARCHAR2(4000)
+ DISPLAY_VALUE                                      VARCHAR2(4000)
+ ISDEFAULT                                          VARCHAR2(9)
+ ISSES_MODIFIABLE                                   VARCHAR2(5)
+ ISSYS_MODIFIABLE                                   VARCHAR2(9)
+ ISINSTANCE_MODIFIABLE                              VARCHAR2(5)
+ ISMODIFIED                                         VARCHAR2(10)
+ ISADJUSTED                                         VARCHAR2(5)
+ ISDEPRECATED                                       VARCHAR2(5)
+ ISBASIC                                            VARCHAR2(5)
+ DESCRIPTION                                        VARCHAR2(255)
+ UPDATE_COMMENT                                     VARCHAR2(255)
+ HASH                                               NUMBER
+
+SQL> show parameter pfile;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+spfile                               string      E:\APP\ASHOK\PRODUCT\11.2.0\DB
+                                                 HOME_1\DATABASE\SPFILEVDSCD003
+                                                 .ORA
+SQL> set lines 200
+SQL> col name for a35
+SQL> col value for a25
+SQL> select name,value,issys_modifiable from v$parameter where name='db_recovery_file_dest';
+
+NAME                                VALUE                     ISSYS_MOD
+----------------------------------- ------------------------- ---------
+db_recovery_file_dest               E:\app\Ashok\flash_recove IMMEDIATE
+                                    ry_area
